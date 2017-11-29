@@ -9,7 +9,7 @@
 *	The grid is the 9x9 matrix which contains the sudoku puzzle
 *	The function puts the data from rows to grid[][]
 */
-void readInput(long int row[], int grid[][9], int grid2[][9])
+void readInput(long row[], int grid[][9], int grid2[][9])
 {
 	int i, j;
 	for(i=0;i<=8;i++)
@@ -116,6 +116,10 @@ void probableCandidate(struct probables* tail[][9], int grid[][9])
 	}
 }
 
+
+/*void printProbables(struct probables* , int)
+*prints the probable candidates in the unit, if it is not already filled
+*/
 void printProbables(struct probables* tail[][9], int grid[][9])
 {
 	int i, j;
@@ -139,6 +143,9 @@ void printProbables(struct probables* tail[][9], int grid[][9])
 	}
 }
 
+/*void printGrid(int)
+*prints the solved/partially solved sudoku puzzle in the console
+*/
 void printGrid(int grid[][9])
 {
 	int i, j;
@@ -157,6 +164,10 @@ void printGrid(int grid[][9])
 	std::cout<<"-------------------------"<<std::endl;
 }
 
+/*
+*checks if the sudoku puzzle is solved or not
+*returns 0 when solved
+*/
 int checkIfDone(int grid[][9])
 {
 	int i, j, count=0;
@@ -171,6 +182,9 @@ int checkIfDone(int grid[][9])
 	return count;
 }
 
+/*
+*Initially used to eliminate the chances of garbage values affecting the solving process
+*/
 void setNull(struct probables* tail[][9])
 {
 	int i, j;
@@ -182,8 +196,10 @@ void setNull(struct probables* tail[][9])
 		}
 	}
 }
-
-void createInfoGrid(long int infoGrid[], struct probables* tail[][9], int grid[][9])
+/*infoGrid contains information if a number can be filled in a box
+*9 numbers in 9 boxes by a 9-digit-number
+*/
+void createInfoGrid(long infoGrid[], struct probables* tail[][9], int grid[][9])
 {
 	int i, row, cols, drows, dcols, flag=-1;
 	for(i=0;i<81;i++)
@@ -224,7 +240,7 @@ void createInfoGrid(long int infoGrid[], struct probables* tail[][9], int grid[]
 	}
 }
 
-void createInfoGridRow(long int infoGridRow[], struct probables* tail[][9], int grid[][9])
+void createInfoGridRow(long infoGridRow[], struct probables* tail[][9], int grid[][9])
 {
 	int i, j, num, flag=-1;
 	for(i=0;i<81;i++)
@@ -259,7 +275,7 @@ void createInfoGridRow(long int infoGridRow[], struct probables* tail[][9], int 
 	}
 }
 
-void createInfoGridColumn(long int infoGridCol[], struct probables* tail[][9], int grid[][9])
+void createInfoGridColumn(long infoGridCol[], struct probables* tail[][9], int grid[][9])
 {
 	int i, j, num, flag=-1;
 	for(i=0;i<81;i++)
@@ -293,8 +309,10 @@ void createInfoGridColumn(long int infoGridCol[], struct probables* tail[][9], i
 		}
 	}
 }
-
-void printInfoGrid(long int infoGrid[])
+/*
+*prints infogrid
+*/
+void printInfoGrid(long infoGrid[])
 {
 	int i;
 	std::cout<<"infoGrid: "<<std::endl;
@@ -304,7 +322,9 @@ void printInfoGrid(long int infoGrid[])
 		std::cout<<std::setfill('0')<<std::setw(9)<<infoGrid[i]<<std::endl;
 	}
 }
-
+/*
+*fills a given number into passed coordinates and removes that number from the probable candidate list of row, column and box
+*/
 void assign(int i, int j, int value, struct probables* tail[][9], int grid[][9])
 {
 	grid[i][j]=value;

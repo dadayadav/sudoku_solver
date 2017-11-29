@@ -86,7 +86,7 @@ void soleCandidate(struct probables* tail[][9], int grid[][9])
 	}
 }
 
-void uniqueCandidate(long int infoGrid[], long int infoGridRow[], long int infoGridCol[], struct probables* tail[][9], int grid[][9])
+void uniqueCandidate(long infoGrid[], long infoGridRow[], long infoGridCol[], struct probables* tail[][9], int grid[][9])
 {
 	//If the unique candi is in the box
 	int i, memo;
@@ -173,7 +173,7 @@ void uniqueCandidate(long int infoGrid[], long int infoGridRow[], long int infoG
 	}
 }
 
-void bcrInteraction(long int infoGrid[], struct probables* tail[][9], int grid[][9])
+void bcrInteraction(long infoGrid[], struct probables* tail[][9], int grid[][9])
 {
 	int i, j, number, row, column;
 	for(i=0;i<81;i++)
@@ -274,7 +274,7 @@ void bcrInteraction(long int infoGrid[], struct probables* tail[][9], int grid[]
 	}
 }
 
-void nakedPair(long int infoGrid[], struct probables* tail[][9])
+void nakedPair(long infoGrid[], struct probables* tail[][9])
 {
 	int block, curNum, numSift, row1=-1, row2=0, col1=0, col2=0;
 	//Naked pairs in blocks
@@ -328,10 +328,6 @@ void nakedPair(long int infoGrid[], struct probables* tail[][9])
 			}
 		}
 	}
-	
-	//naked pairs in rows
-	
-	//naked pairs in columns
 }
 
 

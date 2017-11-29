@@ -1,17 +1,12 @@
-#include "probables.h"
-#include "sudokubasicoperations.h"
-#include "sudokusolvingalgos.h"
-
 #include <cairo/cairo.h>
 #include <gtk/gtk.h>
 #include <iostream>
+#include "probables.h"
+#include "sudokubasicoperations.h"
+#include "sudokusolvingalgos.h"
+#include "sudokugraphics.h"
 
-struct {
-  cairo_surface_t *image;  
-} glob;
-
-
-static void do_drawing(cairo_t *);
+static void do_drawing(cairo_t*);
 
 static gboolean on_draw_event(GtkWidget *widget, cairo_t *cr, 
     gpointer user_data)
@@ -27,62 +22,9 @@ static void do_drawing(cairo_t *cr)
   cairo_paint(cr);    
 }
 
-static const char* getString(int num)
-{
-	char const* str;
-	switch(num)
- 	{
- 		case 1: str = "1";
- 		break;
- 		case 2: str = "2";
- 		break;
- 		case 3: str = "3";
- 		break;
- 		case 4: str = "4";
- 		break;
- 		case 5: str = "5";
- 		break;
- 		case 6: str = "6";
- 		break;
- 		case 7: str = "7";
- 		break;
- 		case 8: str = "8";
- 		break;
- 		case 9: str = "9";
- 		break;
- 		default: str = "";
- 		break;
- 	}
- 	return str;
-}
-
-static void draw_mark(int num, int row, int col, double red) 
-{ 
-  cairo_t *ic;
-  ic = cairo_create(glob.image);
-  cairo_set_font_size(ic, 25);
-  
-  cairo_set_source_rgb(ic, red , 0.0 , 0.0);
-  cairo_move_to(ic, 56*col+20, 56*row+40);
-  cairo_show_text(ic, getString(num));
-  cairo_stroke(ic); 
-}
-
-static void fillDefault(int grid[][9], double red)
-{
-	int i, j;
-	for(i=0;i<9;i++)
-	{
-		for(j=0;j<9;j++)
-		{
-			if(grid[i][j]) draw_mark(grid[i][j], i, j, red); 
-		}
-	}
-}
-
 int main(int argc, char *argv[])
 {
-	long int row[9], infoGrid[81], infoGridRow[81], infoGridCol[81];
+	long row[9], infoGrid[81], infoGridRow[81], infoGridCol[81];
 	int grid[9][9], grid2[9][9];
 	struct probables* tail[9][9];
 	setNull(tail);
@@ -92,21 +34,18 @@ int main(int argc, char *argv[])
 	int i;
 	for(i=0;i<9;i++)
 	{
-	  std::cin >> row[i];
+	  std::cin >> row[i];										//row[] contains 9 9-digit-long integers which are rows of sudoku
 	}
 	readInput(row, grid, grid2);
-	//printGrid(grid);
 	probableCandidate(tail, grid);
+	
+	//Finding solution starts
 	int counter=0;
 	while(checkIfDone(grid)&&counter<1000)
 	{
 		createInfoGrid(infoGrid, tail, grid);
 		createInfoGridRow(infoGridRow, tail, grid);
 		createInfoGridColumn(infoGridCol, tail, grid);
-		//printInfoGrid(infoGrid);
-		//printInfoGrid(infoGridRow);
-		//printInfoGrid(infoGridCol);
-		//printProbables(tail, grid);
 		uniqueCandidate(infoGrid, infoGridRow, infoGridCol, tail, grid);
 		soleCandidate(tail, grid);
 		bcrInteraction(infoGrid, tail, grid);
@@ -114,15 +53,16 @@ int main(int argc, char *argv[])
 		counter++;
 	}
 	printGrid(grid);
+	//Finding solution ends
 	
-	//-----------------------------------------------GRAPHICS AHEAD---------------------------------------------------------------//
+	//Graphics programming started
 	GtkWidget *window;
 	GtkWidget *darea; 
     
 	glob.image = cairo_image_surface_create_from_png("../res/sudoku.png");
 
-	fillDefault(grid, 0.9);
-	fillDefault(grid2, 0.0);
+	fillDefault(grid, 0.9, glob);
+	fillDefault(grid2, 0.0, glob);
 
 	gtk_init(&argc, &argv);
 
@@ -145,6 +85,7 @@ int main(int argc, char *argv[])
 	gtk_main();
 
 	cairo_surface_destroy(glob.image);
+	//Graphics programming ends
   
 	return 0;
 }
